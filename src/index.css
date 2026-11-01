@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom design tokens */
+  --color-canvas-light: #faf8f5;
+  --color-canvas-dark: #0c0d0e;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #141518;
+  --color-surface-subtle-light: #f4efe6;
+  --color-surface-subtle-dark: #1b1c21;
+  --color-border-light: #e6e0d4;
+  --color-border-dark: #26282f;
+  --color-border-subtle-light: #ece7dc;
+  --color-border-subtle-dark: #1f2127;
+  --color-accent-amber: #d97706;
+  --color-accent-terracotta: #c2410c;
+  --color-accent-cobalt: #0284c7;
+}
+
+/* Base typographic tuning */
+html {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* Custom hairline borders and print-editorial rules */
+.editorial-rule {
+  border-top: 1px solid var(--color-border-light);
+}
+.dark .editorial-rule {
+  border-top: 1px solid var(--color-border-dark);
+}
+
+/* Tabular figures for numbers, vectors, dimensions */
+.tabular-data {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 150, 150, 0.45);
+}
+
+/* Prevent horizontal viewport overflow on narrow mobile screens */
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
+/* Independent horizontal scrolling for wide KaTeX equations on mobile */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.25rem 0;
+}
+
+/* Keyboard navigation focus-visible indicator */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #c2410c;
+  outline-offset: 2px;
+}
+
+.dark button:focus-visible,
+.dark a:focus-visible,
+.dark input:focus-visible,
+.dark select:focus-visible,
+.dark textarea:focus-visible {
+  outline: 2px solid #d97706;
+  outline-offset: 2px;
+}
+
+/* Respect prefers-reduced-motion accessibility preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

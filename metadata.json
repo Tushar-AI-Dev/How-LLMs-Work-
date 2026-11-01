@@ -1,0 +1,8 @@
+{
+  "name": "Inside the LLM",
+  "description": "A premium, interactive educational publication exploring the architecture, mathematics, and mechanics of Large Language Models from raw text to next-token generation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
