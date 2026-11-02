@@ -56,7 +56,7 @@ export const Stage6Prediction: React.FC<Stage6PredictionProps> = ({
         </div>
 
         <p className="text-xs text-[#78716c] dark:text-[#9ca3af] leading-relaxed">
-          <strong className="text-[#1c1917] dark:text-[#f3f4f6]">Scientific Scope Note:</strong> While the tokenizer uses the full 50,257-token GPT-2 vocabulary, this educational LM head evaluates and normalizes probabilities across a curated <strong>24-token candidate subset</strong> using weight-tied deterministic educational vectors (<code className="font-mono">W_u = W_e^T</code>) so every logit and softmax step can be inspected directly.
+          <strong className="text-[#1c1917] dark:text-[#f3f4f6]">Scientific Scope Note:</strong> Production models project onto the full 50,257-token vocabulary matrix. Here, the weight-tied unembedding head (<code className="font-mono">W_u = W_e^T</code>) projects onto a curated <strong>24-token candidate subset</strong> (each with its authentic GPT-2 token ID) and normalizes softmax probabilities over those 24 candidates for clear visual inspection.
         </p>
       </div>
 

@@ -93,15 +93,15 @@ export const ScientificInspector: React.FC<ScientificInspectorProps> = ({
     },
     {
       stage: 7,
-      operation: 'Autoregressive Decoding & Context Loop',
+      operation: 'Autoregressive Decoding & Next-Token Feedback Loop',
       formula: 't_{next} \\sim P(w \\mid w_{<t}), \\quad \\mathbf{S}_{new} = [\\mathbf{S}, t_{next}]',
-      inShape: `[seq_len = ${sim.seqLen}]`,
-      outShape: `[seq_len = ${sim.seqLen + 1}]`,
-      params: `Sampling: ${sim.stage7.samplingMethod.toUpperCase()}`,
+      inShape: `[candidate_subset = ${sim.stage6.candidates.length}]`,
+      outShape: `[seq_len + 1 = ${sim.seqLen + 1}]`,
+      params: `Method: ${sim.stage7.samplingMethod.toUpperCase()} · Top-K = ${sim.stage6.topK} · Top-P = ${sim.stage6.topP} · T = ${sim.stage6.temperature}`,
       explanation:
-        'The selected token is sampled and appended to the text buffer. In the next iteration, the entire Transformer forward pass runs again on the updated sequence, predicting subsequent tokens autoregressively.',
-      rawValues: `Selected Token: "${sim.stage7.selectedToken}"`,
-      trackedDetails: `Updated Sequence: "${sim.stage7.updatedText}"`,
+        'A single token is selected from the filtered candidate distribution (via argmax greedy decoding or stochastic sampling) and appended to the input sequence. The expanded sequence is fed back into Stage 1 for the next forward pass using deterministic educational weights.',
+      rawValues: `Selected Token: "${sim.stage7.selectedToken}" (GPT-2 ID #${sim.stage7.selectedTokenId})`,
+      trackedDetails: `Updated Sequence (${sim.seqLen + 1} tokens): "${sim.stage7.updatedText}"`,
     },
   ];
 

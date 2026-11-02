@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from '../components/layout/Container';
 import { runCompleteSimulation, SimulatorForwardPass } from '../services/simulatorEngine';
-import { SimulatorControlBar, STAGES } from '../components/simulator/SimulatorControlBar';
+import { SimulatorControlBar } from '../components/simulator/SimulatorControlBar';
 import { ScientificInspector } from '../components/simulator/ScientificInspector';
 import { Stage1Tokenization } from '../components/simulator/Stage1Tokenization';
 import { Stage2Embeddings } from '../components/simulator/Stage2Embeddings';
@@ -10,13 +10,13 @@ import { Stage4Attention } from '../components/simulator/Stage4Attention';
 import { Stage5TransformerBlock } from '../components/simulator/Stage5TransformerBlock';
 import { Stage6Prediction } from '../components/simulator/Stage6Prediction';
 import { Stage7Generation } from '../components/simulator/Stage7Generation';
-import { Info, Play, RotateCcw, AlertCircle, Sparkles, Send } from 'lucide-react';
+import { Info, Play } from 'lucide-react';
 
 export const SIMULATOR_PRESET_PROMPTS = [
   { id: 'cat', label: 'The cat sat on the', text: 'The cat sat on the' },
-  { id: 'parallel', label: 'Transformers process tokens in parallel and', text: 'Transformers process tokens in parallel and' },
+  { id: 'parallel', label: 'Transformers process tokens in parallel', text: 'Transformers process tokens in parallel' },
   { id: 'generation', label: 'Language models generate text one', text: 'Language models generate text one' },
-  { id: 'coreference', label: "The animal didn't cross because it was", text: "The animal didn't cross because it was" },
+  { id: 'coreference', label: 'The animal crossed the street because', text: 'The animal crossed the street because' },
 ];
 
 export const SimulatorPage: React.FC = () => {
@@ -36,7 +36,7 @@ export const SimulatorPage: React.FC = () => {
   const [samplingMethod, setSamplingMethod] = useState<'greedy' | 'sampling'>('sampling');
   const [generationHistory, setGenerationHistory] = useState<string[]>([]);
 
-  // Compute live forward pass simulation
+  // Compute live forward pass simulation for Stages 01–07
   const [sim, setSim] = useState<SimulatorForwardPass>(() =>
     runCompleteSimulation(committedText, {
       temperature,
@@ -74,7 +74,7 @@ export const SimulatorPage: React.FC = () => {
           }
           return prev + 1;
         });
-      }, 3500); // 3.5 seconds per stage for comfortable reading
+      }, 3500);
     }
     return () => clearInterval(timer);
   }, [isPlaying]);
@@ -106,16 +106,14 @@ export const SimulatorPage: React.FC = () => {
     setIsPlaying(false);
   };
 
-  // Stage 7: Step 1 Token Autoregressively
+  // Educational Stepper
   const handleStepToken = () => {
-    const nextTok = sim.stage7.selectedToken;
     setGenerationHistory((prev) => [...prev, committedText]);
     const updated = sim.stage7.updatedText;
     setCommittedText(updated);
     setInputText(updated);
   };
 
-  // Stage 7: Generate Multiple Tokens
   const handleGenerateMultiple = (count: number) => {
     let currentText = committedText;
     const historyBackup = [...generationHistory, committedText];
@@ -137,7 +135,6 @@ export const SimulatorPage: React.FC = () => {
     setInputText(currentText);
   };
 
-  // Stage 7: Undo last generated token
   const handleUndo = () => {
     if (generationHistory.length > 0) {
       const previousText = generationHistory[generationHistory.length - 1];
@@ -158,7 +155,7 @@ export const SimulatorPage: React.FC = () => {
             </span>
             <span className="text-[#a8a29e] dark:text-[#52525b]">·</span>
             <span className="px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 font-semibold text-[11px]">
-              Educational simulation — not a pretrained LLM
+              Deterministic 8D Educational Transformer (d_model = 8, d_ff = 16)
             </span>
           </div>
 
@@ -173,7 +170,7 @@ export const SimulatorPage: React.FC = () => {
           <div className="pt-1 flex items-center gap-2 text-xs text-[#78716c] dark:text-[#9ca3af]">
             <Info className="w-4 h-4 text-[#c2410c] dark:text-[#d97706] shrink-0" />
             <span>
-              Real BPE tokenizer paired with mathematically exact, deterministic educational weights (d_model = 8, d_ff = 16) designed for transparent inspection.
+              Educational Demonstration Notice: This simulator executes real GPT-2 R50K BPE tokenization and exact Transformer linear algebra using deterministic, untrained 8-dimensional educational weights so every matrix operation can be verified by hand.
             </span>
           </div>
         </div>
